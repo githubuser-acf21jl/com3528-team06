@@ -136,3 +136,8 @@ history = model.fit(train_flow,
                     validation_data=test_flow,
                     validation_steps=validation_steps)
 
+model_json = model.to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+model.save_weights("model.h5")
+print("Saved model to disk")
