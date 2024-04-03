@@ -10,7 +10,7 @@ from keras.models import Model
 from keras.layers import Input, Dense, Flatten, Dropout, BatchNormalization
 from keras.optimizers import Adam, SGD
 from keras.regularizers import l1, l2
-from keras.src.legacy.preprocessing.image import ImageDataGenerator
+from keras.src.leagcy.preprocessing.image import ImageDataGenerator
 from matplotlib import pyplot as plt
 from sklearn.metrics import confusion_matrix
 from keras.layers import Conv2D
