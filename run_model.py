@@ -7,7 +7,7 @@ from tensorflow.keras.preprocessing import image
 model = model_from_json(open("model.json", "r").read())
 model.load_weights('model.h5')
 # model = load_model('static\Fer2013.h5')
-face_haar_cascade = cv2.CascadeClassifier('static\haarcascade_frontalface_default.xml')
+face_haar_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 cap=cv2.VideoCapture(0)
 
 while cap.isOpened():
