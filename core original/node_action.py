@@ -47,7 +47,6 @@ from action.action_flee import ActionFlee
 from action.action_avert import ActionAvert
 from action.action_retreat import ActionRetreat
 from action.action_special import ActionSpecial
-from action.action_face import ActionFace
 
 from std_msgs.msg import MultiArrayDimension
 
@@ -74,8 +73,7 @@ class NodeAction(node.Node):
 				ActionAvert(self),
 				ActionHalt(self),
 				ActionRetreat(self),
-				ActionSpecial(self),
-				ActionFace(self)
+				ActionSpecial(self)
 				]
 
 		# state
@@ -174,7 +172,7 @@ class NodeAction(node.Node):
 				cliff = np.min(cliff_reading)
 				cliff = (cliff * 15.0).astype(np.uint16)
 				cliff -= cliff_min
-				cliff = float(np.clip(cliff, 0, cliff_range)) 
+				cliff = np.float(np.clip(cliff, 0, cliff_range))
 
 				# confidence in a surface ahead of us
 				conf = 0.0
