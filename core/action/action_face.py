@@ -11,10 +11,16 @@ class ActionFace(action_types.ActionTemplate):
                 
     def compute_priority(self):
 
+		# valence = self.input.emotion.valence
+		# arousal = self.input.emotion.arousal 
+		
 		priority = 1
 		
-		# ok
 		return priority
-	
+
+	def start(self):
+
+		
+
     def service(self):
 		# -----
