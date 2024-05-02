@@ -41,11 +41,12 @@ while cap.isOpened():
             max_index = np.argmax(predictions[0])
             emotion_detection = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
             emotion_prediction = emotion_detection[max_index]
-            cv2.putText(res, "Sentiment: {}".format(emotion_prediction), (0,textY+22+5), FONT,0.7, lable_color,2)
-            lable_violation = 'Confidence: {}'.format(str(np.round(np.max(predictions[0])*100,1))+ "%")
+            cv2.putText(res, "Sentiment1: {}".format(emotion_prediction), (0,textY+22+5), FONT,0.7, lable_color,2)
+            lable_violation = 'Confidence1: {}'.format(str(np.round(np.max(predictions[0])*100,1))+ "%")
             violation_text_dimension = cv2.getTextSize(lable_violation,FONT,FONT_SCALE,FONT_THICKNESS )[0]
             violation_x_axis = int(res.shape[1]- violation_text_dimension[0])
             cv2.putText(res, lable_violation, (violation_x_axis,textY+22+5), FONT,0.7, lable_color,2)
+            
     except :
         pass
     frame[0:int(height/6),0:int(width)] =res
