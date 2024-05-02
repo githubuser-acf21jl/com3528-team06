@@ -436,7 +436,7 @@ class DemoSystem(object):
 				self.pars.demo_flags += flag
 			self.pars.action_demo_flags()
 		elif cmd[0] == "p":
-			q = float(cmd[1]) * 0.2
+			q = np.float(cmd[1]) * 0.2
 			self.pars.action.action_prob = q
 			print ("action_prob", self.pars.action.action_prob)
 			self.pars.lower.interact_prob = q

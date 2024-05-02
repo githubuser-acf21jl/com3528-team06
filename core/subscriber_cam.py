@@ -9,6 +9,7 @@ from tensorflow.keras.models import load_model, model_from_json
 from tensorflow.keras.preprocessing.image import load_img,img_to_array
 from tensorflow.keras.preprocessing import image
 
+
 model = model_from_json(open("model.json", "r").read())
 model.load_weights('model.h5')
 
@@ -51,16 +52,27 @@ class CamSubscriber(object):
         """
         Callback function executed upon image arrival
         """
+        cam_data = [None, None]
         try:
             # Convert compressed ROS image to raw CV image
             image = self.bridge.compressed_imgmsg_to_cv2(ros_image, "bgr8")
             # Store image as class attribute for further use
-            self.cam_data[index] = image
+            cam_data[index] = image
             face_haar_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
             gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            faces = face_haar_cascade.detectMultiScale3(gray_image, 1.05, 3, 0, (20, 20), outputRejectLevels=True)
+            faces = face_haar_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=3)
             for (x,y,w,h) in faces:
                 cv2.rectangle(image, (x,y), (x+w,y+h), (0,0,255), thickness=2)
+                # predictions = model.predict(image_pixels)
+                # max_index = np.argmax(predictions[0])
+                # emotion_detection = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
+                # emotion_prediction = emotion_detection[max_index]
+                # cv2.putText(res, "Sentiment1: {}".format(emotion_prediction), (0,textY+22+5), FONT,0.7, lable_color,2)
+                # lable_violation = 'Confidence1: {}'.format(str(np.round(np.max(predictions[0])*100,1))+ "%")
+                # violation_text_dimension = cv2.getTextSize(lable_violation,FONT,FONT_SCALE,FONT_THICKNESS )[0]
+                # violation_x_axis = int(res.shape[1]- violation_text_dimension[0])
+                # cv2.putText(res, lable_violation, (violation_x_axis,textY+22+5), FONT,0.7, lable_color,2)
+                self.cam_data[index] = cam_data[index]
         except CvBridgeError as e:
             # Ignore corrupted frames
             pass
@@ -74,3 +86,5 @@ if __name__ == '__main__':
         if camera.cam_data[0] is not None:
             cv2.imshow("Right cam", camera.cam_data[1])
         cv2.waitKey(1)
+
+

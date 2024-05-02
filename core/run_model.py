@@ -22,7 +22,6 @@ while cap.isOpened():
     FONT_SCALE = 0.8
     FONT_THICKNESS = 2
     lable_color = (10, 10, 255)
-    lable = "Emotion Detection made by Abhishek"
     lable_dimension = cv2.getTextSize(lable,FONT ,FONT_SCALE,FONT_THICKNESS)[0]
     textX = int((res.shape[1] - lable_dimension[0]) / 2)
     textY = int((res.shape[0] + lable_dimension[1]) / 2)

@@ -1,4 +1,4 @@
 opencv-python==4.9.0.80
-numpy==1.24.3
+numpy==1.22
 tensorflow==2.13.1
 pandas==2.0.3
