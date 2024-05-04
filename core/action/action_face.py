@@ -1,8 +1,11 @@
 import numpy as np
 import miro2 as miro
 from . import action_types
-
+import random
+from subscriber_cam import CamSubscriber 
 class ActionFace(action_types.ActionTemplate):
+
+
     def finalize(self):
 
         # parameters
@@ -10,22 +13,57 @@ class ActionFace(action_types.ActionTemplate):
         self.retreatable = True
 
     def compute_priority(self):
-
+        
         # valence = self.input.emotion.valence
         # arousal = self.input.emotion.arousal
 
-        self.interface.priority = 1
+        priority = 1
 
-        # return priority
+        return priority
+        # return self.move_softsat(self.input.priority_peak.height)
 
     def start(self):
-        pass
+
+        face = CamSubscriber()
+
+        
+        print(CamSubscriber.callback_cam)
+
+        
+        # default
+        steps = 200
+
+        # +ve valence boost
+        self.system_state.action_target_valence = 0.2
+        
+        # start action clock
+        self.clock.start(steps)
 
 
     def service(self):
-        # -----
-        pass
 
+        
+        # # get constants
+        # c = miro.constants
+
+        # # read clock
+        # x = self.clock.cosine_circle_profile()
+        # y = self.clock.sine_profile()
+        # z = self.clock.cosine_profile()
+        # self.clock.advance(True)
+
+        # # circle
+        # config = self.kc.getConfig()
+        # config[1] = c.LIFT_RAD_MIN + x * (c.LIFT_RAD_MAX - c.LIFT_RAD_MIN)
+        # config[2] = c.YAW_RAD_MAX * y
+        # config[3] = c.PITCH_RAD_MAX + x * (c.PITCH_RAD_MIN - c.PITCH_RAD_MAX)
+        # #print (config)
+        # self.kc.setConfig(config)
+
+        # # open eyes
+        # self.system_output.cosmetic_joints[2] = 0.0
+        # self.system_output.cosmetic_joints[3] = 0.0
+        pass
     def stop(self):
         pass
 
