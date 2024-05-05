@@ -24,23 +24,77 @@ class ActionFace(action_types.ActionTemplate):
 
     def start(self):
 
-        face = CamSubscriber()
+        steps = 1000
+
+        self.test = CamSubscriber()
 
         
-        print(CamSubscriber.callback_cam)
+        # CamSubscriber()
+        
 
+        # emotion = face.emotion_prediction   
+        # print("asdasdadasd")
+
+        # print(emotion)
         
         # default
-        steps = 200
 
-        # +ve valence boost
-        self.system_state.action_target_valence = 0.2
+
         
         # start action clock
         self.clock.start(steps)
 
 
     def service(self):
+        
+
+        emotion = self.test.emotion_prediction
+        if emotion == "happy":
+            print(emotion)
+            # +ve valence boost
+            self.system_state.action_target_valence = 0.2
+        
+            # get constants
+            c = miro.constants
+
+            # read clock
+            x = self.clock.cosine_circle_profile()
+            y = self.clock.sine_profile()
+            z = self.clock.cosine_profile()
+            self.clock.advance(True)
+
+            # circle
+            config = self.kc.getConfig()
+            config[1] = c.LIFT_RAD_MIN + x * (c.LIFT_RAD_MAX - c.LIFT_RAD_MIN)
+            config[2] = c.YAW_RAD_MAX * y
+            config[3] = c.PITCH_RAD_MAX + x * (c.PITCH_RAD_MIN - c.PITCH_RAD_MAX)
+            #print (config)
+            self.kc.setConfig(config)
+
+            # open eyes
+            self.system_output.cosmetic_joints[2] = 0.0
+            self.system_output.cosmetic_joints[3] = 0.0
+            print(self.system_state.action_target_valence)
+            
+
+        elif emotion == "neutral":
+            print(emotion)
+        elif emotion == "angry":
+            print (emotion)
+            self.clock.advance(True)
+
+        elif emotion == "sad":
+            print(emotion)
+        elif emotion == "surprise":
+            print(emotion)
+        elif emotion == "fear":
+            print(emotion)
+        elif emotion == "digust":
+            print(emotion)
+        else:
+            print(emotion)
+           
+
 
         
         # # get constants

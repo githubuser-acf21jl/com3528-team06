@@ -40,6 +40,7 @@ class CamSubscriber(object):
             queue_size=1,
             tcp_nodelay=True,
         )
+        self.emotion_prediction = None
 
     def callback_caml(self, ros_image):  # Left camera
         self.callback_cam(ros_image, 0)
@@ -52,33 +53,38 @@ class CamSubscriber(object):
         """
         Callback function executed upon image arrival
         """
-        emotion_prediction = None
+        # emotion_prediction = None
         cam_data = [None, None]
+        
         try:
-            # Convert compressed ROS image to raw CV image
-            image = self.bridge.compressed_imgmsg_to_cv2(ros_image, "bgr8")
-            # Store image as class attribute for further use
-            cam_data[index] = image
-            face_haar_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-            grey_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            faces = face_haar_cascade.detectMultiScale(grey_image, scaleFactor=1.1, minNeighbors=3)
-            for (x,y,w,h) in faces:
-                cv2.rectangle(image, (x,y), (x+w,y+h), (0,0,255), thickness=2)
-                roi_grey = grey_image[y-5:y+h+5,x-5:x+w+5]
-                roi_grey = cv2.resize(roi_grey,(48,48))
-                image_pixels = img_to_array(roi_grey)
-                image_pixels = np.expand_dims(image_pixels, axis = 0)
-                image_pixels /= 255
-                predictions = model.predict(image_pixels)
-                max_index = np.argmax(predictions[0])
-                emotion_detection = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
-                emotion_prediction = emotion_detection[max_index]
-                # print(emotion_prediction)
-            self.cam_data[index] = cam_data[index]
+            if self.emotion_prediction == None: 
+                # Convert compressed ROS image to raw CV image
+                image = self.bridge.compressed_imgmsg_to_cv2(ros_image, "bgr8")
+                # Store image as class attribute for further use
+                cam_data[index] = image
+                face_haar_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+                grey_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                faces = face_haar_cascade.detectMultiScale(grey_image, scaleFactor=1.1, minNeighbors=3)
+                for (x,y,w,h) in faces:
+                    cv2.rectangle(image, (x,y), (x+w,y+h), (0,0,255), thickness=2)
+                    roi_grey = grey_image[y-5:y+h+5,x-5:x+w+5]
+                    roi_grey = cv2.resize(roi_grey,(48,48))
+                    # print(roi_grey)
+                    image_pixels = img_to_array(roi_grey)
+                    image_pixels = np.expand_dims(image_pixels, axis = 0)
+                    image_pixels /= 255
+                    predictions = model.predict(image_pixels)
+                    max_index = np.argmax(predictions[0])
+                    emotion_detection = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
+                    self.emotion_prediction = emotion_detection[max_index]
+                    # print(self.emotion_prediction)
+                self.cam_data[index] = cam_data[index]
+                rospy.sleep(1)
+            else:
+                pass
         except CvBridgeError as e:
             # Ignore corrupted frames
             pass
-        return emotion_prediction
         
 
 if __name__ == '__main__':
