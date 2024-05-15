@@ -14,10 +14,14 @@ pair_with_miro [num]
 instead of:
 ssh miro@dia-miro[num]
 
-Clone our github repository:
+Cloning our github repository:
 git clone https://github.com/githubuser-acf21jl/com3528-team06.git
 
-Make sure to install all the required packages before running the code:
+Go to the core directory:
+cd com3528-team06/core
+
+
+Making sure to install all the required packages before running the code:
 pip3 install -r requirement.txt
 
 After the environment is set up, go to core folder and run to activate the miro's demo mode:
