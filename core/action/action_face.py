@@ -13,20 +13,18 @@ class ActionFace(action_types.ActionTemplate):
 		self.retreatable = True
 
 	def compute_priority(self):
-		
-		# valence = self.input.emotion.valence
-		# arousal = self.input.emotion.arousal
 
+		# the priority is set to maximum so that miro will only perform this action
 		priority = 1
 
 		return priority
-		# return self.move_softsat(self.input.priority_peak.height)
 
 	def start(self):
 
+		# we set the steps to determin how long will each emotion action last
 		steps = 250
 
-		self.test = CamSubscriber()
+		self.miro_cam = CamSubscriber()
 
 		# compute start point for fovea in WORLD
 		self.fovea_i_WORLD = self.kc.changeFrameAbs(miro.constants.LINK_HEAD, miro.constants.LINK_WORLD, self.fovea_HEAD)
@@ -68,19 +66,6 @@ class ActionFace(action_types.ActionTemplate):
 			print ("fovea_i_WORLD", self.fovea_i_WORLD)
 			print ("fovea_f_WORLD", fovea_f_WORLD)
 			print ("pattern time", total_dist, secs_ideal, steps_ideal, steps_constrained)
-
-		
-		# CamSubscriber()
-		
-
-		# emotion = face.emotion_prediction   
-		# print("asdasdadasd")
-
-		# print(emotion)
-		
-		# default
-
-
 		
 		# start action clock
 		self.clock.start(steps)
@@ -88,7 +73,8 @@ class ActionFace(action_types.ActionTemplate):
 
 	def service(self):
 
-		emotion = self.test.emotion_prediction
+		# obtain emotion_prediction from subscriber_cam.py
+		emotion = self.miro_cam.emotion_prediction
 
 		c = miro.constants
 		# read clock
@@ -98,6 +84,8 @@ class ActionFace(action_types.ActionTemplate):
 		self.clock.advance(True)
 
 		if emotion == "happy":
+			# +ve valence boost
+			self.system_state.action_target_valence = 0.5
 			x = self.clock.cosine_profile()
 
 			# compute an interim target along a straight trajectory
@@ -114,6 +102,8 @@ class ActionFace(action_types.ActionTemplate):
 			print(emotion)
 			# self.clock.advance(True)
 		elif emotion == "angry":
+			# -ve valence boost
+			self.system_state.action_target_valence = -0.5
 			# read clock
 			x = self.clock.cosine_profile()
 			# self.clock.advance(True)
@@ -176,32 +166,9 @@ class ActionFace(action_types.ActionTemplate):
 		elif emotion == "digust":
 			print(emotion)
 		else:
-			
+			# neutral emotion
+			self.system_state.action_target_valence = 0.0
 			print(emotion)
-		   
-
-
-		
-		# # get constants
-		# c = miro.constants
-
-		# # read clock
-		# x = self.clock.cosine_circle_profile()
-		# y = self.clock.sine_profile()
-		# z = self.clock.cosine_profile()
-		# self.clock.advance(True)
-
-		# # circle
-		# config = self.kc.getConfig()
-		# config[1] = c.LIFT_RAD_MIN + x * (c.LIFT_RAD_MAX - c.LIFT_RAD_MIN)
-		# config[2] = c.YAW_RAD_MAX * y
-		# config[3] = c.PITCH_RAD_MAX + x * (c.PITCH_RAD_MIN - c.PITCH_RAD_MAX)
-		# #print (config)
-		# self.kc.setConfig(config)
-
-		# # open eyes
-		# self.system_output.cosmetic_joints[2] = 0.0
-		# self.system_output.cosmetic_joints[3] = 0.0
 		pass
 
 	def stop(self):
