@@ -3,6 +3,10 @@
 ## Link to Download the Dataset
 Download the [Dataset](https://drive.google.com/file/d/1-yfLj6kGllW8euEd0NepM4jNen8-IOrg/view?usp=sharing) here.
 
+core -> miro's code
+model_training.py -> python file for training the facial recognition model
+requirement.txt -> specified the required packages information
+
 Making sure the laptop is in 'Real Robot Mode':
 robot_switch robot
 
@@ -19,7 +23,6 @@ git clone https://github.com/githubuser-acf21jl/com3528-team06.git
 
 Go to the core directory:
 cd com3528-team06/core
-
 
 Making sure to install all the required packages before running the code:
 pip3 install -r requirement.txt
