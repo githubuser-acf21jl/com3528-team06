@@ -30,3 +30,7 @@ pip3 install -r requirement.txt
 After the environment is set up, go to core folder and run to activate the miro's demo mode:
 ./client_demo.py
 
+If you want to test out the model performance using the webcam, uncomment the line 23 in subscriber_cam.py and run:
+python3 subscriber_cam.py
+when you want to run ./client_demo.py
+
